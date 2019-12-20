@@ -203,20 +203,21 @@ define([
         },
 
         onProductListLoad: function (loadedData) {
-            var products = this.sortProduct(loadedData.products.map(this.createProduct.bind(this)));
-            this.products(products);
-            this.countTotalProducts(parseInt(loadedData.size, 10));
-            this.currentSize(Math.max(this.currentSize(), this.products().length));
+            if (loadedData && loadedData.products && loadedData.products.map) {
+                var products = this.sortProduct(loadedData.products.map(this.createProduct.bind(this)));
+                this.products(products);
+                this.countTotalProducts(parseInt(loadedData.size, 10));
+                this.currentSize(Math.max(this.currentSize(), this.products().length));
 
-            var productIds = products.map(function (product) { return product.getId() });
-            var editPositions = this.editPositions();
+                var productIds = products.map(function (product) { return product.getId() });
+                var editPositions = this.editPositions();
 
-            for (var productId in editPositions) {
-                if ($.inArray(parseInt(productId, 10), productIds) < 0) {
-                    delete editPositions[productId];
+                for (var productId in editPositions) {
+                    if ($.inArray(parseInt(productId, 10), productIds) < 0) {
+                        delete editPositions[productId];
+                    }
                 }
             }
-
             this.editPositions(editPositions);
             this.loading(false);
         },
